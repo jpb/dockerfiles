@@ -1,16 +1,10 @@
-FROM debian:jessie
+FROM cspicer/qemu:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN sed -i 's/jessie main/jessie main non-free/' /etc/apt/sources.list \
-  && apt-get update -qq \
+RUN apt-get update -qq \
   && apt-get install -y \
-    qemu-kvm \
-    qemu-system-x86 \
-    qemu-utils \
-    ovmf \
-    seabios \
     libvirt-daemon\ 
     libvirt-daemon-system
 
@@ -23,3 +17,4 @@ RUN mkdir -p /etc/libvirt/qemu/ \
   && echo 'user = "root"' >> /etc/libvirt/qemu.conf
 
 VOLUME [ "/sys/fs/cgroup" ]
+VOLUME [ "/var/lib/libvirt/" ]
