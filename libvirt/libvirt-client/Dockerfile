@@ -22,7 +22,6 @@ RUN apt-get update -qq \
     python-libvirt
 
 RUN curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}-${APP_VERSION}.tar.gz \
-  && echo ${ARCHIVE_URL} \
   && tar -zxf /tmp/${APP_NAME}-${APP_VERSION}.tar.gz -C /tmp \
   && cd /tmp/${APP_NAME}-${APP_VERSION} \
   && python setup.py install --prefix=/usr \
