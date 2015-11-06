@@ -14,6 +14,7 @@ RUN apt-get update -qq \
     pkg-config \
     libxml2-dev \
     libdevmapper-dev \
+    libyajl-dev \
     libnl-3-dev \
     libnl-route-3-dev \
     python-dev
@@ -31,7 +32,6 @@ RUN mkdir -p /etc/libvirt/qemu/ \
   && echo 'tls_port = "16514"' >> /etc/libvirt/libvirtd.conf \
   && echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf \
   && echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf \
-  && echo 'nvram = [ "/usr/share/ovmf/ovmf_code.fd:/usr/share/ovmf/ovmf_vars.fd" ]' >> /etc/libvirt/qemu.conf
   && echo 'user = "root"' >> /etc/libvirt/qemu.conf
 
 VOLUME [ "/sys/fs/cgroup" ]
