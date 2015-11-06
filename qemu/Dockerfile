@@ -30,7 +30,10 @@ RUN sed -i 's/jessie main/jessie main non-free/' /etc/apt/sources.list \
   && apt-get autoclean -y \
   && apt-get autoremove -y
 
-RUN curl -sSL ${VFIO_SCRIPT_URL} -o /usr/local/bin/vfio-bind \
+RUN mkdir -p /usr/share/ovmf/ \
+  && curl -sSL ${VFIO_SCRIPT_URL} -o /usr/local/bin/vfio-bind \
   && chmod 755 /usr/local/bin/vfio-bind
 
+COPY ovmf-code.fd /usr/share/ovmf/
+COPY ovmf-vars.fd /usr/share/ovmf/
 COPY ovmf-efi.fd /usr/share/ovmf/
