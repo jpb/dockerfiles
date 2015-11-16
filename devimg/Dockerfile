@@ -66,17 +66,6 @@ RUN curl -s -L -O \
 RUN dpkg -i vagrant_${VAGRANT_VERSION}_x86_64.deb \
   && rm vagrant_${VAGRANT_VERSION}_x86_64.deb
 
-# set up home dev enviroment
-RUN useradd dev \
-  && mkdir /home/dev \
-  && mkdir -p /home/dev/go /home/dev/bin
-
-ENV PATH /home/dev/bin:$PATH
-ENV GOPATH /home/dev/go:$GOPATH
-
-# set permissions on dev home
-RUN chown -R dev: /home/dev
-
 # cleanup
 #RUN apt-get remove -y --purge \
 #  build-essential \
@@ -85,6 +74,3 @@ RUN apt-get autoremove -y && apt-get clean -y
 RUN rm -rf /var/lib/apt/lists/* \
   /tmp/* \
   /var/tmp/*
-
-# set user
-USER dev
