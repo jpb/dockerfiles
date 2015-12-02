@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV ANSIBLE_VERSION 2.0.0-0.5.beta3
+ENV ANSIBLE_VERSION 1.9.4
 
 RUN apk add --update \
     build-base \
@@ -19,4 +19,4 @@ RUN apk add --update \
  
 RUN rm -rf /var/cache/apk/* \
 
-ENTRYPOINT ["/usr/local/bin/ansible"]
+CMD ["/usr/local/bin/ansible"]
