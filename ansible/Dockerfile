@@ -5,6 +5,8 @@ ENV ANSIBLE_VERSION 1.9.4
 
 RUN apk add --update \
     build-base \
+    bash \
+    openssh-client \
     python \
     python-dev \
     py-pip \ 
