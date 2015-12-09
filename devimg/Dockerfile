@@ -4,10 +4,9 @@ MAINTAINER Chris Spicer
 
 ENV \
   ANSIBLE_VERSION=2.0.0-0.3.beta1 \
-  TERRAFORM_VERSION=0.6.4 \
+  TERRAFORM_VERSION=0.6.8 \
   PACKER_VERSION=0.8.6 \
-  VAGRANT_VERSION=1.7.4 \
-  GOLANG_VERSION=1.5.1
+  VAGRANT_VERSION=1.7.4
 
 RUN apt-get update -qq -y && apt-get install -y \
   sudo \
@@ -26,12 +25,6 @@ RUN apt-get install -y \
   python-pip \
   python-dev
 
-# install golang
-RUN curl -s -L \
-  https://storage.googleapis.com/golang/go${GOLANG_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -zx
-ENV GOROOT /usr/local/go
-ENV PATH /usr/local/go/bin:$PATH
-
 # install ansible + libraries
 RUN pip install \
   http://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz \
@@ -48,7 +41,7 @@ RUN pip install awscli
 
 # install terraform
 RUN curl -s -L -O \
-  https://dl.bintray.com/mitchellh/terraform/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /tmp/terraform \
   && cp -R /tmp/terraform/* /usr/local/bin \
   && rm -rf terraform_${TERRAFORM_VERSION}_linux_amd64.zip /tmp/terraform
