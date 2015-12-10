@@ -7,6 +7,6 @@ RUN apk add --update \
   && pip install --upgrade pip \
   && pip install awscli
  
-RUN rm -rf /var/cache/apk/* \
+RUN rm -rf /var/cache/apk/*
 
-ENTRYPOINT ["/usr/local/bin/aws"]
+ENTRYPOINT ["/usr/bin/aws"]
