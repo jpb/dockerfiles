@@ -20,6 +20,6 @@ RUN apk add --update \
     dopy \
     dnsimple
  
-RUN rm -rf /var/cache/apk/* \
+RUN rm -rf /var/cache/apk/*
 
 CMD ["/usr/local/bin/ansible"]
