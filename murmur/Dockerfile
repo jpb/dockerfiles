@@ -5,4 +5,5 @@ RUN apk add --update \
     murmur \
   && rm -rf /var/cache/apk/*
 
-CMD ["/usr/bin/murmurd", "-fg", "-help"]
+ENTRYPOINT ["/usr/bin/murmurd"]
+CMD ["-fg", "-help"]
