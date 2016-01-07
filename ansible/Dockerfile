@@ -22,4 +22,5 @@ RUN apk add --update \
  
 RUN rm -rf /var/cache/apk/*
 
-CMD ["/usr/local/bin/ansible"]
+ENTRYPOINT ["ansible"]
+CMD ["--help"]
