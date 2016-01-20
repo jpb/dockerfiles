@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV ANSIBLE_VERSION 2.0.0.0
+ENV ANSIBLE_VERSION 2.0.0.2
 
 RUN apk add --update \
     build-base \
@@ -14,6 +14,7 @@ RUN apk add --update \
   && pip install --upgrade pip \
   && pip install \
     http://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz \
+    awscli \
     requests \
     docker-py \
     boto \
