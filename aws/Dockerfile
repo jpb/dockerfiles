@@ -6,6 +6,8 @@ ENV AWS_CLI_VERSION 1.9.15
 RUN apk add --update \
     python \
     py-pip \ 
+    bash \
+    make \
   && pip install --upgrade pip \
   && pip install \
     boto3 \
