@@ -19,6 +19,8 @@ RUN git clone --depth 1 \
     /tmp/mapcrafter \
   && cd /tmp/mapcrafter \
   && cmake . \
-  && make install
+  && make install \
+  && rm -rf /tmp/mapcrafter
 
-#ENTRYPOINT ["/usr/local/bin/mapcrafter"]
+ENTRYPOINT ["mapcrafter"]
+CMD ["--help"]
