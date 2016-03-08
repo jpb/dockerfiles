@@ -12,7 +12,7 @@ help:
 build: ## build vim images
 	@docker build -t $(NAME):base vim-base
 	@docker build -t $(NAME):vim-plug vim-plug
-	@docker build -t $(NAME)vim:editor vim-editor
+	@docker build -t $(NAME):editor vim-editor
 	@docker tag -f $(NAME):editor $(NAME):latest
 
 all: build
