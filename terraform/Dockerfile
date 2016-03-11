@@ -1,18 +1,37 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV TERRAFORM_VERSION 0.6.6
+ENV TERRAFORM_VERSION 0.6.12
+ENV TERRAFORM_RELEASE_URL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+ENV GLIBC_VERSION 2.23-r1
+ENV GLIBC_RELEASE_URL https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}
 
-RUN apk add --update \
-  ca-certificates curl unzip \
-  && curl -sSL https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-2.21-r2.apk -o /tmp/glibc-2.21-r2.apk \
-  && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \
-  && curl -sSL https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-bin-2.21-r2.apk -o /tmp/glibc-bin-2.21-r2.apk \
-  && apk add --allow-untrusted /tmp/glibc-bin-2.21-r2.apk \
-  && rm -rf /tmp/glibc* \
-  && rm -rf /var/cache/apk/*
+RUN apk add --no-cache \
+    ca-certificates \
+    curl \
+    unzip \
+    libgcc
 
-RUN curl -sSL https://dl.bintray.com/mitchellh/terraform/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o /tmp/terraform_${TERRAFORM_VERSION}.zip \
+RUN curl \
+    --silent \
+    --show-error \
+    --location "${GLIBC_RELEASE_URL}/glibc-${GLIBC_VERSION}.apk" \
+    --output /tmp/glibc-${GLIBC_VERSION}.apk \
+  && curl \
+    --silent \
+    --show-error \
+    --location "${GLIBC_RELEASE_URL}/glibc-bin-${GLIBC_VERSION}.apk" \
+    --output /tmp/glibc-bin-${GLIBC_VERSION}.apk \
+  && apk add --no-cache --allow-untrusted \
+    /tmp/glibc-${GLIBC_VERSION}.apk \
+    /tmp/glibc-bin-${GLIBC_VERSION}.apk \
+  && rm -rf /tmp/glibc*
+
+RUN curl \
+  --silent \
+  --show-error \
+  --location "${TERRAFORM_RELEASE_URL}" \
+  --output /tmp/terraform_${TERRAFORM_VERSION}.zip \
   && unzip /tmp/terraform_${TERRAFORM_VERSION}.zip -d /tmp/terraform \
   && cp -R /tmp/terraform/* /usr/local/bin \
   && rm -rf /tmp/terraform_${TERRAFORM_VERSION}.zip /tmp/terraform
