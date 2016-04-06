@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV TERRAFORM_VERSION 0.6.12
+ENV TERRAFORM_VERSION 0.6.14
 ENV TERRAFORM_RELEASE_URL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 ENV GLIBC_VERSION 2.23-r1
 ENV GLIBC_RELEASE_URL https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}
