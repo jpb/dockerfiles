@@ -2,7 +2,7 @@ FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
 ENV APP_NAME vault
-ENV APP_VERSION 0.3.1
+ENV APP_VERSION 0.5.2
 ENV ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
 
 RUN apk add --update \
