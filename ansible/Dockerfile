@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV ANSIBLE_VERSION 2.0.0.2
+ENV ANSIBLE_VERSION 2.0.1.0
 
 RUN apk add --update \
     build-base \
