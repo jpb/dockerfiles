@@ -19,6 +19,7 @@ RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
     unzip \
     rsync \
     git \
+    openssh-client \
     tmux \
     g++ \
     gcc \
