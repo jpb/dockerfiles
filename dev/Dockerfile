@@ -50,6 +50,16 @@ RUN curl \
   && tar -C /usr/local -xzf /tmp/golang.tar.gz \
   && rm /tmp/golang.tar.gz
 
+# docker client
+RUN curl \
+    --silent \
+    --show-error \
+    --create-dirs \
+    --location "https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz" \
+    --output "/tmp/docker.tar.gz" \
+  && tar -C /usr/local/bin -xzf /tmp/docker.tar.gz --strip 1 \
+  && rm /tmp/docker.tar.gz
+
 ENV GOPATH /data/dev/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
