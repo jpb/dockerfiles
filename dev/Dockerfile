@@ -15,6 +15,7 @@ RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
   && apt-get install -y --no-install-recommends \
     sudo \
     curl \
+    less \
     unzip \
     rsync \
     git \
