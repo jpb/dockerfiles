@@ -1,9 +1,8 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV APP_NAME nomad
-ENV APP_VERSION 0.2.2
-ENV ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
+ENV NOMAD_VERSION 0.2.2
+ENV NOMAD_ARCHIVE_URL https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
 
 RUN apk add --no-cache \
     bash \
@@ -11,9 +10,9 @@ RUN apk add --no-cache \
     curl \
     unzip
 
-RUN curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}_${APP_VERSION}.zip \
-  && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp/${APP_NAME} \
-  && cp -R /tmp/${APP_NAME}/* /usr/local/bin \
-  && rm -rf /tmp/${APP_NAME}_${APP_VERSION}.zip /tmp/${APP_NAME}
+RUN curl -sSL ${NOMAD_ARCHIVE_URL} -o /tmp/nomad.zip \
+  && unzip /tmp/nomad.zip -d /tmp/nomad \
+  && cp -R /tmp/nomad/* /usr/local/bin \
+  && rm -rf /tmp/nomad.zip /tmp/nomad
 
 ENTRYPOINT ["/usr/local/bin/nomad"]
