@@ -7,9 +7,7 @@ ENV ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_
     
 RUN apk add --no-cache \
     curl \
-    unzip \
-    bash \
-    make
+    unzip
 
 RUN curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}_${APP_VERSION}.zip \
   && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp \
