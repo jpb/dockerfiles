@@ -14,8 +14,8 @@ RUN curl \
   --show-error \
   --location ${APP_ARCHIVE_URL} \
   --output /tmp/${APP_NAME}_${APP_VERSION}.zip \
-  && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp \
-  && cp -R /tmp/${APP_NAME} /usr/local/bin/${APP_NAME} \
-  && rm /tmp/${APP_NAME}_${APP_VERSION}.zip /tmp/${APP_NAME}
+  && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp/${APP_NAME} \
+  && cp -R /tmp/${APP_NAME}/* /usr/local/bin/ \
+  && rm -rf /tmp/${APP_NAME}_${APP_VERSION}.zip /tmp/${APP_NAME}
 
 ENTRYPOINT ["/usr/local/bin/packer"]
