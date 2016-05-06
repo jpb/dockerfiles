@@ -3,7 +3,7 @@ MAINTAINER Chris Spicer <github@cspicer.ca>
 
 ENV APP_NAME packer
 ENV APP_VERSION 0.10.0
-ENV ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
+ENV APP_ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
     
 RUN apk add --no-cache \
     curl \
