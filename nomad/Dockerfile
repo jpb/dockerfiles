@@ -27,7 +27,11 @@ RUN curl \
     /tmp/glibc-bin-${GLIBC_VERSION}.apk \
   && rm -rf /tmp/glibc*
 
-RUN curl -sSL ${NOMAD_ARCHIVE_URL} -o /tmp/nomad.zip \
+RUN curl \
+    --silent \
+    --show-error \
+    --location "${NOMAD_ARCHIVE_URL}" \
+    --output /tmp/nomad.zip \
   && unzip /tmp/nomad.zip -d /tmp/nomad \
   && cp -R /tmp/nomad/* /usr/local/bin \
   && rm -rf /tmp/nomad.zip /tmp/nomad
