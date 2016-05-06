@@ -5,12 +5,11 @@ ENV APP_NAME packer
 ENV APP_VERSION 0.10.0
 ENV ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
     
-RUN apk add --update \
+RUN apk add --no-cache \
     curl \
     unzip \
     bash \
-    make \
-  && rm -rf /var/cache/apk/*
+    make
 
 RUN curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}_${APP_VERSION}.zip \
   && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp \
