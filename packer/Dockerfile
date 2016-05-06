@@ -9,7 +9,11 @@ RUN apk add --no-cache \
     curl \
     unzip
 
-RUN curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}_${APP_VERSION}.zip \
+RUN curl \
+  --silent \
+  --show-errors \
+  --location ${ARCHIVE_URL} \
+  --output /tmp/${APP_NAME}_${APP_VERSION}.zip \
   && unzip /tmp/${APP_NAME}_${APP_VERSION}.zip -d /tmp \
   && cp -R /tmp/${APP_NAME} /usr/local/bin/${APP_NAME} \
   && rm /tmp/${APP_NAME}_${APP_VERSION}.zip /tmp/${APP_NAME}
