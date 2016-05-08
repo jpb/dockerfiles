@@ -2,7 +2,7 @@ FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
 ENV APP_NAME packer
-ENV APP_VERSION 0.10.0
+ENV APP_VERSION 0.10.1
 ENV APP_ARCHIVE_URL https://releases.hashicorp.com/${APP_NAME}/${APP_VERSION}/${APP_NAME}_${APP_VERSION}_linux_amd64.zip
 ENV APP_ARCHIVE_SHA256 eadd33bc0f8fa42034059fc1cda5f43ed6f540746e767480f0706ebed49b45e5
 
