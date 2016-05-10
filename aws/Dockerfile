@@ -6,8 +6,6 @@ ENV AWS_CLI_VERSION 1.10.26
 RUN apk add --no-cache \
     python \
     py-pip \ 
-    bash \
-    make \
   && pip install --upgrade pip \
   && pip install \
     boto3 \
