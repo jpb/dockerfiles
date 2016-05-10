@@ -3,7 +3,7 @@ MAINTAINER Chris Spicer <github@cspicer.ca>
 
 ENV AWS_CLI_VERSION 1.10.26
 
-RUN apk add --update \
+RUN apk add --no-cache \
     python \
     py-pip \ 
     bash \
@@ -12,7 +12,6 @@ RUN apk add --update \
   && pip install \
     boto3 \
     awscli==${AWS_CLI_VERSION} \
-    aws-shell \
-  && rm -rf /var/cache/apk/*
+    aws-shell
 
 ENTRYPOINT ["/usr/bin/aws"]
