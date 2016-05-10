@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV YOUTUBE_DL_VERSION 2016.01.01
+ENV YOUTUBE_DL_VERSION 2016.05.10
 
 RUN apk add --no-cache \
     ca-certificates \
