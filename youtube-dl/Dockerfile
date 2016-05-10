@@ -11,7 +11,6 @@ RUN apk add --update \
   && pip install --upgrade pip \
   && pip install \
     youtube-dl==${YOUTUBE_DL_VERSION} \
-    aws-shell \
   && rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["youtube-dl"]
