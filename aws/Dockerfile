@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer <github@cspicer.ca>
 
-ENV AWS_CLI_VERSION 1.10.19
+ENV AWS_CLI_VERSION 1.10.26
 
 RUN apk add --update \
     python \
