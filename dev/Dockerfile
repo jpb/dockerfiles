@@ -7,7 +7,7 @@ ENV GOLANG_VERSION 1.6
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
 ENV GOLANG_DOWNLOAD_SHA256 5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db45332e836b0b
 
-ENV VIMRC_URL "https://raw.githubusercontent.com/cspicer/dotfiles/master/vim/.vimrc"
+ENV DOTFILE_REPO https://github.com/cspicer/dotfiles.git
 ENV VIM_PLUG_URL "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 
 RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
@@ -27,6 +27,7 @@ RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
     make \
     python-dev \
     python-pip \
+    stow \
     vim-nox \
   && apt-get clean -y \
   && apt-get autoclean -y \
@@ -65,6 +66,15 @@ RUN curl \
 ENV GOPATH /data/dev/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
+# dotfiles
+RUN git clone \
+    "$DOTFILE_REPO" \
+    /root/.dotfiles \
+  && cd /root/.dotfiles \
+  && for file in $(ls /root/.dotfiles); \
+      do stow $file; \
+    done
+
 # editor configuration 
 RUN curl \
     --silent \
@@ -72,12 +82,8 @@ RUN curl \
     --create-dirs \
     --location "$VIM_PLUG_URL" \
     --output "$HOME/.vim/autoload/plug.vim" \
-  && curl \
-    --silent \
-    --show-error \
-    --location "$VIMRC_URL" \
-    --output "$HOME/.vimrc" \
   && vim -c "PlugInstall | qa!"
 
+WORKDIR "/root"
 ENTRYPOINT ["bash"]
 
