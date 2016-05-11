@@ -82,7 +82,7 @@ RUN curl \
     --create-dirs \
     --location "$VIM_PLUG_URL" \
     --output "$HOME/.vim/autoload/plug.vim" \
-  && vim -c "PlugInstall | qa!"
+  && vim -c "PlugInstall | qa!" > /dev/null # redirect output from vim to null
 
 WORKDIR "/root"
 ENTRYPOINT ["bash"]
