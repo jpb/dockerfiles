@@ -4,6 +4,9 @@ MAINTAINER Chris Spicer <github@cspicer.ca>
 ENV MINECRAFT_VERSION 1.9.4
 ENV MINECRAFT_RELEASE_URL "https://s3.amazonaws.com/Minecraft.Download/versions/${MINECRAFT_VERSION}/minecraft_server.${MINECRAFT_VERSION}.jar"
 
+ENV MINECRAFT_MEMORY_MIN 2048
+ENV MINECRAFT_MEMORY_MAX 4096
+
 RUN apk add --no-cache \
     curl \
     openjdk8-jre-base
@@ -15,7 +18,8 @@ RUN mkdir -p /data/minecraft \
     --location "${MINECRAFT_RELEASE_URL}" \
     --output /data/minecraft/server.jar
 
+COPY run.sh /data/minecraft/run.sh
 WORKDIR /data/minecraft/server
 
-ENTRYPOINT ["/usr/bin/java"]
-CMD ["-Xmx2048M", "-Xms1024M", "-XX:+UseConcMarkSweepGC", "-jar", "/data/minecraft/server.jar"]
+ENTRYPOINT ["/data/minecraft/run.sh"]
+
