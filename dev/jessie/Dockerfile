@@ -7,8 +7,13 @@ ENV GOLANG_VERSION 1.6
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
 ENV GOLANG_DOWNLOAD_SHA256 5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db45332e836b0b
 
+ENV NEOVIM_VERSION 0.1.4
+ENV NEOVIM_ARCHIVE_URL https://github.com/neovim/neovim/archive/v${NEOVIM_VERSION}.tar.gz
+
 ENV DOTFILE_REPO https://github.com/cspicer/dotfiles.git
-ENV VIM_PLUG_URL "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+ENV VIM_PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+ENV XDG_CONFIG_HOME $HOME/.config
 
 RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
   && apt-get update -qq \
@@ -28,11 +33,40 @@ RUN echo 'Dpkg::Progress-Fancy "1";' >> /etc/apt/apt.conf.d/99_progressbar \
     python-dev \
     python-pip \
     stow \
-    vim-nox \
   && apt-get clean -y \
   && apt-get autoclean -y \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/*
+
+# neovim
+RUN apt-get update -qq \
+  && apt-get install -y --no-install-recommends \
+    libtool \
+    libtool-bin \
+    autoconf \
+    automake \
+    cmake \
+    g++ \
+    pkg-config \
+  && curl \
+    --silent \
+    --show-error \
+    --create-dirs \
+    --location "$NEOVIM_ARCHIVE_URL" \
+    --output "/tmp/neovim.tar.gz" \
+  && tar -C /usr/local/src/ -xzf /tmp/neovim.tar.gz \
+  && cd /usr/local/src/neovim-${NEOVIM_VERSION} \
+  && make && make install \
+  && rm -rf /usr/local/src/neovim* \ 
+  && rm /tmp/neovim.tar.gz \
+  && apt-get remove -y \
+    libtool \
+    libtool-bin \
+    autoconf \
+    automake \
+    cmake \
+    g++ \
+    pkg-config
 
 # python dev libraries
 RUN pip install --upgrade pip \
@@ -67,7 +101,8 @@ ENV GOPATH /data/dev/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # dotfiles
-RUN git clone \
+RUN rm /root/.profile \
+  && git clone \
     "$DOTFILE_REPO" \
     /root/.dotfiles \
   && cd /root/.dotfiles \
@@ -82,7 +117,10 @@ RUN curl \
     --create-dirs \
     --location "$VIM_PLUG_URL" \
     --output "$HOME/.vim/autoload/plug.vim" \
-  && vim -c "PlugInstall | qa!" > /dev/null # redirect output from vim to null
+  && mkdir -p "$XDG_CONFIG_HOME" \
+  && ln -s ~/.vim "$XDG_CONFIG_HOME/nvim" \
+  && ln -s ~/.vimrc "$XDG_CONFIG_HOME/nvim/init.vim" \
+  && nvim -c "PlugInstall | qa!"
 
 WORKDIR "/root"
 ENTRYPOINT ["bash"]
