@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     unzip \
     rsync \
     git \
+    git-bash-completion \
     openssh-client \
     bash \
     tmux \
