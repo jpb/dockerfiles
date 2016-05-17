@@ -10,10 +10,15 @@ RUN apk add --no-cache \
     less \
     unzip \
     rsync \
+    bash \
+    bash-completion \
+    util-linux \
+    coreutils \
+    findutils \
+    grep \
     git \
     git-bash-completion \
     openssh-client \
-    bash \
     tmux \
     tmux-bash-completion \
     tmux-vim \
@@ -27,7 +32,9 @@ RUN curl \
     --location "https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz" \
     --output "/tmp/docker.tar.gz" \
   && tar -C /usr/local/bin -xzf /tmp/docker.tar.gz --strip-components 1 \
-  && rm /tmp/docker.tar.gz
+  && rm /tmp/docker.tar.gz \
+  && apk add --no-cache \
+    docker-bash-completion
 
 # gnu stow
 RUN apk add --no-cache \
