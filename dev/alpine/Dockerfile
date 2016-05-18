@@ -3,7 +3,6 @@ MAINTAINER Chris Spicer
 
 ENV DOTFILE_REPO https://github.com/cspicer/dotfiles.git
 
-# base development image
 RUN apk add --no-cache \
     tar \
     curl \
@@ -22,7 +21,8 @@ RUN apk add --no-cache \
     tmux \
     tmux-bash-completion \
     tmux-vim \
-    make
+    make \
+    jq
 
 # docker client
 RUN curl \
