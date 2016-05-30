@@ -10,7 +10,7 @@ ENV GOLANG_DOWNLOAD_SHA256 5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db4
 ENV NEOVIM_VERSION 0.1.4
 ENV NEOVIM_ARCHIVE_URL https://github.com/neovim/neovim/archive/v${NEOVIM_VERSION}.tar.gz
 
-ENV DOTFILE_REPO https://github.com/cspicer/dotfiles.git
+ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git
 ENV VIM_PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 ENV XDG_CONFIG_HOME $HOME/.config
