@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER Chris Spicer
 
-ENV DOTFILE_REPO https://github.com/cspicer/dotfiles.git
+ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git
 
 RUN apk add --no-cache \
     tar \
