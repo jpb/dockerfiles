@@ -3,7 +3,7 @@ MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV ANSIBLE_VERSION 2.1.0.0
 
-RUN apk add --update \
+RUN apk add --no-cache \
     python \
     python-dev \
     py-pip \ 
@@ -19,8 +19,6 @@ RUN pip install --upgrade pip \
     boto \
     dopy \
     dnsimple
- 
-RUN rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["ansible"]
 CMD ["--help"]
