@@ -2,6 +2,7 @@ FROM alpine:3.3
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV ANSIBLE_VERSION 2.1.0.0
+ENV ANSIBLE_ARTIFACT_URL https://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz
 
 RUN apk add --no-cache \
     python \
@@ -12,7 +13,7 @@ RUN apk add --no-cache \
 
 RUN pip install --upgrade pip \
   && pip install \
-    http://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz \
+    ${ANSIBLE_ARTIFACT_URL} \
     awscli \
     requests \
     docker-py \
