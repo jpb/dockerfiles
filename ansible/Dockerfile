@@ -4,12 +4,10 @@ MAINTAINER Chris Spicer <git@cspicer.net>
 ENV ANSIBLE_VERSION 2.1.0.0
 
 RUN apk add --update \
-    build-base \
-    bash \
-    openssh-client \
     python \
     python-dev \
     py-pip \ 
+    openssh-client \
     git
 
 RUN pip install --upgrade pip \
