@@ -10,8 +10,9 @@ RUN apk add --update \
     python \
     python-dev \
     py-pip \ 
-    git \
-  && pip install --upgrade pip \
+    git
+
+RUN pip install --upgrade pip \
   && pip install \
     http://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz \
     awscli \
