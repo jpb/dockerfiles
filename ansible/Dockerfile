@@ -14,12 +14,8 @@ RUN apk add --no-cache \
 RUN pip install --upgrade pip \
   && pip install \
     ${ANSIBLE_ARTIFACT_URL} \
-    awscli \
-    requests \
     docker-py \
-    boto \
-    dopy \
-    dnsimple
+    boto
 
 ENTRYPOINT ["ansible"]
 CMD ["--help"]
