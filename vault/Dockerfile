@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.3
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV APP_NAME vault

@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.3
 MAINTAINER Chris Spicer
 
 ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git

@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.3
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV MINECRAFT_VERSION 1.9.4
