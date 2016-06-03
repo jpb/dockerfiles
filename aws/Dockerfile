@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.3
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV AWS_CLI_VERSION 1.10.26
