@@ -2,7 +2,7 @@ FROM debian:jessie
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV APP_NAME qemu
-ENV APP_VERSION 2.4.1
+ENV APP_VERSION 2.6.0
 ENV ARCHIVE_URL http://wiki.qemu-project.org/download/${APP_NAME}-${APP_VERSION}.tar.bz2
 ENV VFIO_SCRIPT_URL https://gist.githubusercontent.com/cspicer/ff78616c98fe68965bbf/raw/55cda9406c3d03fda8e15efb9835b42386679579/vfio-bind
     
