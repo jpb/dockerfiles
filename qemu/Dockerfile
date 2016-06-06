@@ -4,6 +4,7 @@ MAINTAINER Chris Spicer <git@cspicer.net>
 ENV APP_NAME qemu
 ENV APP_VERSION 2.6.0
 ENV ARCHIVE_URL http://wiki.qemu-project.org/download/${APP_NAME}-${APP_VERSION}.tar.bz2
+ENV ARCHIVE_CHECKSUM e01b0b2d450d606fce7ef12155dad45f9f6d323f6555c6ac71e61bf4e953cb50
 ENV VFIO_SCRIPT_URL https://gist.githubusercontent.com/cspicer/ff78616c98fe68965bbf/raw/55cda9406c3d03fda8e15efb9835b42386679579/vfio-bind
     
 RUN sed -i 's/jessie main/jessie main non-free/' /etc/apt/sources.list \
@@ -17,6 +18,7 @@ RUN sed -i 's/jessie main/jessie main non-free/' /etc/apt/sources.list \
     libglib2.0-dev \
     libpixman-1-dev \
   && curl -sSL ${ARCHIVE_URL} -o /tmp/${APP_NAME}-${APP_VERSION}.tar.bz2 \
+  && echo ${ACRHIVE_CHECKSUM} /tmp/${APP_NAME}-${APP_VERSION}.tar.bz2 | sha256sum -c . \
   && tar -xjf /tmp/${APP_NAME}-${APP_VERSION}.tar.bz2 -C /tmp \
   && cd /tmp/${APP_NAME}-${APP_VERSION} \
   && ./configure --target-list=x86_64-softmmu --enable-libusb \
