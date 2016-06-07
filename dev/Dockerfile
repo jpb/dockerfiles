@@ -1,28 +1,13 @@
-FROM alpine:3.3
+FROM cspicer/dev-base:latest
 MAINTAINER Chris Spicer
 
+ENV TERM screen-256color
 ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git
 
+ENV VIM_PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 RUN apk add --no-cache \
-    tar \
-    curl \
-    less \
-    unzip \
-    rsync \
-    bash \
-    bash-completion \
-    util-linux \
-    coreutils \
-    findutils \
-    grep \
-    git \
-    git-bash-completion \
-    openssh-client \
-    tmux \
-    tmux-bash-completion \
-    tmux-vim \
-    make \
-    jq
+    vim
 
 # docker client
 RUN curl \
@@ -64,7 +49,17 @@ RUN git clone "$DOTFILE_REPO" /root/.dotfiles \
       do stow $file; \
     done
 
+# vim
+RUN curl \
+    --silent \
+    --show-error \
+    --create-dirs \
+    --location "$VIM_PLUG_URL" \
+    --output "$HOME/.vim/autoload/plug.vim" \
+  && vim -c "PlugInstall | qa!"
+
 VOLUME ["/data"]
 WORKDIR /data
+
 ENTRYPOINT ["bash"]
 
