@@ -4,6 +4,11 @@ MAINTAINER Chris Spicer
 ENV TERM screen-256color
 ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git
 
+ENV VIM_PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+RUN apk add --no-cache \
+    vim
+
 # docker client
 RUN curl \
     --silent \
@@ -43,6 +48,15 @@ RUN git clone "$DOTFILE_REPO" /root/.dotfiles \
   && for file in $(ls /root/.dotfiles); \
       do stow $file; \
     done
+
+# vim
+RUN curl \
+    --silent \
+    --show-error \
+    --create-dirs \
+    --location "$VIM_PLUG_URL" \
+    --output "$HOME/.vim/autoload/plug.vim" \
+  && vim -c "PlugInstall | qa!"
 
 VOLUME ["/data"]
 WORKDIR /data
