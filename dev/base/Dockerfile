@@ -4,6 +4,7 @@ MAINTAINER Chris Spicer
 RUN apk add --no-cache \
     tar \
     curl \
+    wget \
     less \
     unzip \
     rsync \
@@ -60,6 +61,10 @@ RUN apk add --no-cache --virtual build-deps \
     moonscript \
   && apk del build-deps
 
+# golang development
+RUN apk add --no-cache \
+    go \
+    go-tools
 
 ENTRYPOINT ["bash"]
 
