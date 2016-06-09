@@ -18,7 +18,8 @@ RUN pip install --upgrade pip \
   && pip install \
     ${ANSIBLE_ARTIFACT_URL} \
     docker-py \
-    boto
+    boto \
+    boto3
 
 ENTRYPOINT ["ansible"]
 CMD ["--help"]
