@@ -15,3 +15,5 @@ docker run -it --rm \
   -v /var/run/docker.sock:/var/run/docker.sock  \
   jamesbrennan/dev
 ```
+
+Based on [cspicer/dockerfiles](https://github.com/cspicer/dockerfiles).
