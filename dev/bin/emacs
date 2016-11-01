@@ -1,0 +1,5 @@
+#!/bin/sh
+
+dr -e 'TMPDIR=/tmp/emacs-docker' \
+   -v emacs:/tmp/emacs-docker \
+   jamesbrennan/emacs $@

@@ -1,11 +1,12 @@
-FROM alpine:3.3
-MAINTAINER Chris Spicer <git@cspicer.net>
+FROM jamesbrennan/base
+MAINTAINER James Brennan <james@jamesbrennan.ca>
 
 ENV AWS_CLI_VERSION 1.10.26
 
 RUN apk add --no-cache \
+    groff \
     python \
-    py-pip \ 
+    py-pip \
   && pip install --upgrade pip \
   && pip install \
     boto3 \

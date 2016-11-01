@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM jamesbrennan/base
 MAINTAINER Chris Spicer <git@cspicer.net>
 
 ENV ANSIBLE_VERSION 2.1.0.0

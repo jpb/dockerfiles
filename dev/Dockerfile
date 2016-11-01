@@ -1,13 +1,5 @@
-FROM cspicer/dev-base:latest
-MAINTAINER Chris Spicer
-
-ENV TERM screen-256color
-ENV DOTFILE_REPO https://gitlab.com/cspicer/dotfiles.git
-
-ENV VIM_PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-RUN apk add --no-cache \
-    vim
+FROM jamesbrennan/base
+MAINTAINER James Brennan <james@jamesbrennan.ca>
 
 # docker client
 RUN curl \
@@ -42,24 +34,27 @@ RUN apk add --no-cache \
   && rm /tmp/stow.tar.gz \
   && apk del build-deps
 
-# dotfiles
-RUN git clone "$DOTFILE_REPO" /root/.dotfiles \
-  && cd /root/.dotfiles \
-  && for file in $(ls /root/.dotfiles); \
-      do stow $file; \
-    done
+RUN git clone https://github.com/Bash-it/bash-it.git ~/.bash-it \
+    && git --git-dir /root/.bash-it/.git checkout 7ffb9e2
 
-# vim
-RUN curl \
-    --silent \
-    --show-error \
-    --create-dirs \
-    --location "$VIM_PLUG_URL" \
-    --output "$HOME/.vim/autoload/plug.vim" \
-  && vim -c "PlugInstall | qa!"
+RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles \
+    && git --git-dir /root/.dotfiles/.git checkout 8084e11
 
-VOLUME ["/data"]
-WORKDIR /data
+RUN cd /root/.dotfiles && \
+    stow emacs \
+         git \
+         tmux \
+         bash
 
-ENTRYPOINT ["bash"]
+COPY bin /root/bin
 
+ENV TERM screen-256color
+ENV LANG en_US.UTF-8
+ENV PATH /root/bin:$PATH
+ENV SHELL /bin/bash
+ENV EMACS_SERVER_FILE /tmp/emacs-docker/server.sock
+ENV ALTERNATE_EDITOR emacs
+ENV EDITOR emacsclient
+
+ENTRYPOINT ["tmux"]
+CMD ["new", "-s", "dev"]

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+dr -v aws:/root/.aws jamesbrennan/aws $@

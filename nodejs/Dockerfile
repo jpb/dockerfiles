@@ -1,9 +1,9 @@
 FROM jamesbrennan/base
-MAINTAINER Chris Spicer <git@cspicer.net>
+MAINTAINER James Brennan <james@jamesbrennan.ca>
 
 RUN apk add --update \
     bash \
-    jq \
+    nodejs \
   && rm -rf /var/cache/apk/*
 
-ENTRYPOINT ["jq"]
+ENTRYPOINT ["node"]
