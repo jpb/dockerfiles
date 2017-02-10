@@ -1,5 +1,17 @@
-FROM jamesbrennan/base
+FROM ubuntu:16.04
 MAINTAINER James Brennan <james@jamesbrennan.ca>
+
+RUN apt-get update \
+  && apt-get -y install \
+    curl \
+    emacs \
+    git \
+    jq \
+    stow \
+    tmux \
+    wget \
+    bash-completion \
+  && apt-get clean
 
 # docker client
 RUN curl \
@@ -9,32 +21,10 @@ RUN curl \
     --location "https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz" \
     --output "/tmp/docker.tar.gz" \
   && tar -C /usr/local/bin -xzf /tmp/docker.tar.gz --strip-components 1 \
-  && rm /tmp/docker.tar.gz \
-  && apk add --no-cache \
-    docker-bash-completion
-
-# gnu stow
-RUN apk add --no-cache \
-    perl \
-  && apk add --no-cache --virtual \
-    build-deps \
-    automake \
-  && curl \
-    --silent \
-    --show-error \
-    --create-dirs \
-    --location "http://ftp.gnu.org/gnu/stow/stow-2.2.2.tar.gz" \
-    --output "/tmp/stow.tar.gz" \
-  && mkdir -p /usr/local/src/stow \
-  && tar -C /usr/local/src/stow -xzf /tmp/stow.tar.gz --strip-components 1 \
-  && cd /usr/local/src/stow \
-  && ./configure \
-  && make install \
-  && rm -rf /usr/local/src/stow \
-  && rm /tmp/stow.tar.gz \
-  && apk del build-deps
+  && rm /tmp/docker.tar.gz
 
 # Dotfiles
+
 RUN git clone https://github.com/Bash-it/bash-it.git ~/.bash-it \
     && git --git-dir /root/.bash-it/.git checkout 7ffb9e2
 
@@ -44,24 +34,17 @@ RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d \
 RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles \
     && git --git-dir /root/.dotfiles/.git checkout 9e5b490 
 
-RUN cd /root/.dotfiles && \
-    stow emacs \
-         git \
-         tmux \
-         bash
-
-# emacs
-
-RUN apk add --no-cache emacs
+RUN rm ~/.bashrc  \
+   && cd /root/.dotfiles \
+   && stow emacs \
+           git \
+           tmux \
+           bash
 
 RUN emacs -nw -batch -u root -q -kill && \
     sed -i "s/dotspacemacs-install-packages 'all/dotspacemacs-install-packages 'used-but-keep-unused/g" \
       ${HOME}/.spacemacs && \
     emacs -nw -batch -u root -q -kill
-
-
-RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' > /etc/apk/repositories \
-  && apk add --no-cache tmux@edge
 
 COPY bin /root/bin
 

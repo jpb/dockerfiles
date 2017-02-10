@@ -6,4 +6,6 @@ RUN apk add --update \
     nodejs \
   && rm -rf /var/cache/apk/*
 
+RUN npm install -g elm
+
 ENTRYPOINT ["node"]

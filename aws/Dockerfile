@@ -1,7 +1,7 @@
 FROM jamesbrennan/base
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
-ENV AWS_CLI_VERSION 1.10.26
+ENV AWS_CLI_VERSION 1.10.38
 
 RUN apk add --no-cache \
     groff \

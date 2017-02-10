@@ -4,10 +4,10 @@
 ```
 docker volume create --name aws
 docker volume create --name projects
-docker volume create --name emacs
 docker volume create --name ssh
 
 docker run -it --rm \
+  -w /root/projects \
   -v ssh:/root/.ssh \
   -v aws:/root/.aws \
   -v projects:/root/projects \

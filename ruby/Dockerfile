@@ -1,13 +1,9 @@
 FROM jamesbrennan/base
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
-# Install rbenv
-RUN apk add --no-cache bash
-RUN git clone https://github.com/rbenv/rbenv.git /root/.rbenv
-RUN cd /root/.rbenv && git fetch && git checkout v1.0.0
-RUN apk add --no-cache --virtual .build-deps
-RUN cd /root/.rbenv && src/configure && make -C src
-RUN apk del .build-deps
+ARG RUBY
+ARG RUBY_VERSION
+
 RUN echo 'gem: --no-document' > /etc/gemrc
 
 RUN apk add --no-cache linux-headers openssl
@@ -16,14 +12,18 @@ RUN tar -xzvf ruby-install-0.6.0.tar.gz
 RUN cd ruby-install-0.6.0/ && make install
 RUN rm -r ruby-install-0.6.0
 
-# Install ruby-build
-# RUN git clone https://github.com/rbenv/ruby-build.git /root/ruby-build
-# RUN cd /root/ruby-build && git fetch && git checkout v20160913
-# RUN cd /root/ruby-build && ./install.sh
-# RUN rm -r /root/ruby-build
+RUN apk add --no-cache \
+        zlib-dev \
+        libxml2-dev \
+        libxslt-dev \
+        tzdata \
+        yaml-dev \
+        sqlite-dev \
+        postgresql-dev \
+        mysql-dev
 
-ENV PATH /root/.rbenv/bin:/root/.rbenv/shims:$PATH
+RUN ruby-install --system $RUBY $RUBY_VERSION
 
-VOLUME ["/root/.rbenv"]
+RUN gem install bundler
 
-ENTRYPOINT /bin/bash
+ENTRYPOINT ["ruby"]

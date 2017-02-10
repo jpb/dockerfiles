@@ -1,7 +1,8 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
 RUN apk add --no-cache \
+    bash \
     build-base \
     coreutils \
     curl \
@@ -11,13 +12,13 @@ RUN apk add --no-cache \
     jq \
     less \
     make \
+    man \
     openssh-client \
     rsync \
     tar \
     tmux \
     unzip \
     util-linux \
-    wget \
-    bash
+    wget
 
 ENTRYPOINT ["bash"]
