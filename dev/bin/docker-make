@@ -1,0 +1,3 @@
+#!/bin/bash
+
+bash <(sed 's/ *-v.*pwd.*:\/opt.*/-v projects:\/opt \\/' $(pwd)/docker-make)
