@@ -1,7 +1,65 @@
-FROM jamesbrennan/base
+FROM ubuntu:16.04
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
-# docker client
+# ENV TERM xterm-256color
+# ENV LANG en_US.UTF-8
+# ENV LANGUAGE en_US:en
+# ENV LC_ALL en_US.UTF-8
+ENV TERM screen-256color
+ENV LANG en_US.UTF-8
+
+RUN apt-get update \
+  && apt-get -y install \
+    bash-completion \
+    curl \
+    default-jdk \
+    dnsutils \
+    git \
+    ispell \
+    jq \
+    libffi-dev \
+    libsqlite3-dev \
+    make \
+    man \
+    mysql-client \
+    netcat \
+    python \
+    python-openssl \
+    python-pip \
+    python-software-properties  \
+    silversearcher-ag \
+    software-properties-common \
+    stow \
+    tmux \
+    wget \
+    zlib1g-dev \
+    zsh \
+  && add-apt-repository ppa:kelleyk/emacs \
+  && add-apt-repository ppa:brightbox/ruby-ng \
+  && apt-get update \
+  && apt-get -y install \
+    emacs25 \
+    ruby2.4 \
+    ruby2.4-dev \
+  && apt-get clean
+
+RUN gem install bundler
+
+# lein
+RUN curl -L "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" -o /usr/local/bin/lein \
+  && chmod +x /usr/local/bin/lein \
+  && lein
+
+# bats
+RUN git clone --depth 1 https://github.com/sstephenson/bats.git /tmp/bats \
+  && /tmp/bats/install.sh /usr/local \
+  && rm -rf /tmp/bats
+
+RUN LC_ALL=C pip install --upgrade pip
+RUN LC_ALL=C pip install ansible boto boto3 yamllint jedi
+
+# Docker Client
+
 RUN curl \
     --silent \
     --show-error \
@@ -9,69 +67,63 @@ RUN curl \
     --location "https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz" \
     --output "/tmp/docker.tar.gz" \
   && tar -C /usr/local/bin -xzf /tmp/docker.tar.gz --strip-components 1 \
-  && rm /tmp/docker.tar.gz \
-  && apk add --no-cache \
-    docker-bash-completion
+  && rm /tmp/docker.tar.gz
 
-# gnu stow
-RUN apk add --no-cache \
-    perl \
-  && apk add --no-cache --virtual \
-    build-deps \
-    automake \
-  && curl \
-    --silent \
-    --show-error \
-    --create-dirs \
-    --location "http://ftp.gnu.org/gnu/stow/stow-2.2.2.tar.gz" \
-    --output "/tmp/stow.tar.gz" \
-  && mkdir -p /usr/local/src/stow \
-  && tar -C /usr/local/src/stow -xzf /tmp/stow.tar.gz --strip-components 1 \
-  && cd /usr/local/src/stow \
-  && ./configure \
-  && make install \
-  && rm -rf /usr/local/src/stow \
-  && rm /tmp/stow.tar.gz \
-  && apk del build-deps
+# Docker Compose
+
+RUN curl -L "https://github.com/docker/compose/releases/download/1.10.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+  && chmod +x /usr/local/bin/docker-compose
+
+# kubectl
+
+RUN curl -L "https://storage.googleapis.com/kubernetes-release/release/v1.5.4/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl \
+  && chmod +x /usr/local/bin/kubectl
+
+# nodejs
+RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+  && apt-get install -y nodejs
+
+RUN npm install -g \
+  yarn \
+  typescript \
+  typescript-formatter \
+  tslint \
+  tern
+
+RUN yarn global add \
+  elm \
+  elm-format
 
 # Dotfiles
-RUN git clone https://github.com/Bash-it/bash-it.git ~/.bash-it \
-    && git --git-dir /root/.bash-it/.git checkout 7ffb9e2
 
-RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d \
-    && git --git-dir /root/.emacs.d/.git checkout c2774bc
+RUN ls -al
 
-RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles \
-    && git --git-dir /root/.dotfiles/.git checkout 9e5b490 
+RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
-RUN cd /root/.dotfiles && \
-    stow emacs \
-         git \
-         tmux \
-         bash
+RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d && echo c7a103a
 
-# emacs
+RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles && echo 420340b
 
-RUN apk add --no-cache emacs
+RUN cd /root/.dotfiles \
+   && stow emacs \
+           git \
+           tmux \
+           zsh \
+   && chsh -s /usr/bin/zsh
 
-RUN emacs -nw -batch -u root -q -kill && \
-    sed -i "s/dotspacemacs-install-packages 'all/dotspacemacs-install-packages 'used-but-keep-unused/g" \
-      ${HOME}/.spacemacs && \
-    emacs -nw -batch -u root -q -kill
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
+  && ~/.fzf/install --all
 
-
-RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' > /etc/apk/repositories \
-  && apk add --no-cache tmux@edge
+RUN emacs -nw -batch -u root -q -kill
+    # && \
+    # sed -i "s/dotspacemacs-install-packages 'all/dotspacemacs-install-packages 'used-but-keep-unused/g" \
+    #   ${HOME}/.spacemacs && \
+    # emacs -nw -batch -u root -q -kill
 
 COPY bin /root/bin
 
-ENV TERM screen-256color
-ENV LANG en_US.UTF-8
-ENV PATH /root/bin:$PATH
-ENV SHELL /bin/bash
-ENV EMACS_SERVER_FILE /tmp/emacs-docker/server.sock
-ENV ALTERNATE_EDITOR emacs
-ENV EDITOR emacsclient
+ENV PATH=/root/bin:$PATH
+ENV SHELL=/bin/zsh
 
 ENTRYPOINT ["tmux"]
-CMD ["new", "-s", "dev"]
+CMD ["-u", "new", "-s", "dev"]
