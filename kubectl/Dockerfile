@@ -1,7 +1,18 @@
-FROM golang
+FROM ubuntu:16.04
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
-ARG KUBE_VERSION="1.10.0"
+ENV AWS_CLI_VERSION 1.16.173
+
+RUN apt-get -qq update \
+  && apt-get -qq -y install \
+    curl \
+    groff \
+    python-pip \
+  && apt-get -qq clean
+
+RUN pip install awscli==${AWS_CLI_VERSION}
+
+ARG KUBE_VERSION="1.13.0"
 ARG KUBE_URL_PREFIX="https://storage.googleapis.com/kubernetes-release/release"
 
 RUN curl \
@@ -9,7 +20,7 @@ RUN curl \
     --output /usr/local/bin/kubectl \
   && chmod +x /usr/local/bin/kubectl
 
-RUN go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
+# RUN go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
 
 RUN curl \
     --location https://storage.googleapis.com/kubernetes-helm/helm-v2.9.0-linux-amd64.tar.gz \
@@ -20,7 +31,5 @@ RUN curl \
     && chmod +x /usr/local/bin/helm \
     && rm /tmp/helm.tar.gz \
     && rm -r /tmp/linux-amd64
-
-RUN curl -L https://git.io/getIstio | sh -
 
 ENTRYPOINT ["kubectl"]

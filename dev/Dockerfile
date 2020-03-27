@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
 # ENV TERM xterm-256color
@@ -9,6 +9,9 @@ ENV TERM screen-256color
 ENV LANG en_US.UTF-8
 
 RUN apt-get update \
+  && apt-get -y install software-properties-common \
+  && add-apt-repository ppa:git-core/ppa \
+  && apt-get update \
   && apt-get -y install \
     bash-completion \
     curl \
@@ -26,7 +29,6 @@ RUN apt-get update \
     python \
     python-openssl \
     python-pip \
-    python-software-properties  \
     silversearcher-ag \
     software-properties-common \
     stow \
@@ -34,6 +36,7 @@ RUN apt-get update \
     wget \
     zlib1g-dev \
     zsh \
+    zip \
   && add-apt-repository ppa:kelleyk/emacs \
   && add-apt-repository ppa:brightbox/ruby-ng \
   && apt-get update \
@@ -46,7 +49,7 @@ RUN apt-get update \
 RUN gem install bundler
 
 # lein
-RUN curl -L "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" -o /usr/local/bin/lein \
+RUN curl -L "https://raw.githubusercontent.com/technomancy/leiningen/2.9.1/bin/lein" -o /usr/local/bin/lein \
   && chmod +x /usr/local/bin/lein \
   && lein
 
@@ -71,7 +74,7 @@ RUN curl \
 
 # Docker Compose
 
-RUN curl -L "https://github.com/docker/compose/releases/download/1.10.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+RUN curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
   && chmod +x /usr/local/bin/docker-compose
 
 # kubectl
@@ -94,13 +97,29 @@ RUN yarn global add \
   elm \
   elm-format
 
+# Go
+ENV PATH=$PATH:/usr/local/go/bin:/root/projects/go/bin
+ENV GOBIN=/usr/local/go/bin
+
+RUN wget --quiet -O go.tgz "https://golang.org/dl/go1.12.linux-amd64.tar.gz" \
+  && tar -C /usr/local -xzf go.tgz \
+  && rm go.tgz \
+  && curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh \
+  && go version \
+  && go get -u -v github.com/nsf/gocode \
+  && go get -u -v github.com/rogpeppe/godef \
+  && go get -u -v golang.org/x/tools/cmd/guru \
+  && go get -u -v golang.org/x/tools/cmd/gorename \
+  && go get -u -v golang.org/x/tools/cmd/goimports \
+  && go get -u -v github.com/kisielk/errcheck
+
 # Dotfiles
 
 RUN ls -al
 
 RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
-RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d && echo c7a103a
+RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d && echo 582f9aa
 
 RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles && echo 420340b
 

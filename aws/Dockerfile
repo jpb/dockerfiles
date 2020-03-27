@@ -1,11 +1,12 @@
 FROM ubuntu:16.04
 MAINTAINER James Brennan <james@jamesbrennan.ca>
 
-ENV AWS_CLI_VERSION 1.16.71
+ENV AWS_CLI_VERSION 1.18.1
 
 RUN apt-get -qq update \
   && apt-get -qq -y install \
     curl \
+    unzip \
     groff \
     python-pip \
   && apt-get -qq clean
@@ -16,8 +17,11 @@ RUN curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubunt
 
 RUN pip install \
     boto3 \
-    awscli==${AWS_CLI_VERSION} \
+    # awscli==${AWS_CLI_VERSION} \
     cfn-lint \
-    aws-shell \
+    aws-shell
+RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" \
+  && unzip awscli-bundle.zip \
+  && ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
 ENTRYPOINT ["/usr/local/bin/aws"]
