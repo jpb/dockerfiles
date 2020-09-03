@@ -8,7 +8,8 @@ MAINTAINER James Brennan <james@jamesbrennan.ca>
 ENV TERM screen-256color
 ENV LANG en_US.UTF-8
 
-RUN apt-get update \
+RUN export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
   && apt-get -y install software-properties-common \
   && add-apt-repository ppa:git-core/ppa \
   && apt-get update \
@@ -37,11 +38,11 @@ RUN apt-get update \
     zlib1g-dev \
     zsh \
     zip \
-  && add-apt-repository ppa:kelleyk/emacs \
+  && add-apt-repository ppa:ubuntu-elisp/ppa \
   && add-apt-repository ppa:brightbox/ruby-ng \
   && apt-get update \
   && apt-get -y install \
-    emacs25 \
+    emacs-snapshot \
     ruby2.4 \
     ruby2.4-dev \
   && apt-get clean
@@ -58,8 +59,8 @@ RUN git clone --depth 1 https://github.com/sstephenson/bats.git /tmp/bats \
   && /tmp/bats/install.sh /usr/local \
   && rm -rf /tmp/bats
 
-RUN LC_ALL=C pip install --upgrade pip
-RUN LC_ALL=C pip install ansible boto boto3 yamllint jedi
+# RUN LC_ALL=C pip install --upgrade pip
+# RUN LC_ALL=C pip install ansible boto boto3 yamllint jedi
 
 # Docker Client
 
@@ -83,7 +84,7 @@ RUN curl -L "https://storage.googleapis.com/kubernetes-release/release/v1.5.4/bi
   && chmod +x /usr/local/bin/kubectl
 
 # nodejs
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
   && apt-get install -y nodejs
 
 RUN npm install -g \
@@ -115,13 +116,11 @@ RUN wget --quiet -O go.tgz "https://golang.org/dl/go1.12.linux-amd64.tar.gz" \
 
 # Dotfiles
 
-RUN ls -al
-
 RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
-RUN git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d && echo 582f9aa
+RUN git clone -b v0.200.13 https://github.com/syl20bnr/spacemacs.git ~/.emacs.d
 
-RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles && echo 420340b
+RUN git clone https://github.com/jpb/dotfiles.git /root/.dotfiles
 
 RUN cd /root/.dotfiles \
    && stow emacs \
